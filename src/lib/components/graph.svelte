@@ -2,7 +2,6 @@
 	import * as config from '$lib/constants/graphConfig.constants';
 	import { random2DGraphData } from '$lib/factories/randomGraphData';
 	import * as d3 from 'd3';
-	// import { leastSquares } from "$lib/regression/LinearRegression.svelte";
 	export let name = 'Graph page';
 
 	const data = random2DGraphData(100, 20, 'Weight', 'Size');
