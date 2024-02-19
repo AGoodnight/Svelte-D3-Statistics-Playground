@@ -1,10 +1,11 @@
 <script lang="ts">
 	import * as config from '$lib/constants/graphConfig.constants';
 	import { random2DGraphData } from '$lib/factories/randomGraphData';
+	import { fitLine, type Point } from '$lib/regression/LinearRegression';
 	import * as d3 from 'd3';
 	export let name = 'Graph page';
 
-	const data = random2DGraphData(100, 20, 'Weight', 'Size');
+	const data = random2DGraphData('Weight', 'Size', 1000, 1000);
 
 	const {
 		width,
@@ -24,11 +25,41 @@
 	let gridlinesY: any = undefined;
 	let line: any = undefined;
 
+	const fittedLine = fitLine(
+		data.map((d) => ({
+			x: d['Weight'],
+			y: d['Size']
+		}))
+	).map((p: Point) => [p.x, p.y]);
+
+	console.log(JSON.stringify(data));
+
 	const xExtent = d3.extent(data, (d) => d['Weight']);
 	const yExtent = d3.extent(data, (d) => d['Size']);
 	if (xExtent[0] === undefined || yExtent[0] === undefined) {
 		throw Error('no extent');
 	}
+
+	$: lx = d3
+		.scaleLinear()
+		.domain(xExtent)
+		.range([marginLeft, width - marginRight]);
+
+	$: ly = d3
+		.scaleLinear()
+		.domain(yExtent)
+		.range([height - marginBottom, marginTop]);
+
+	$: line = d3
+		.line()
+		.x((d) => {
+			const v = lx(d[0]);
+			return v;
+		})
+		.y((d) => {
+			const v = ly(d[1]);
+			return v;
+		});
 
 	$: x = d3
 		.scaleLinear()
@@ -81,7 +112,7 @@
 	<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
 	<g bind:this={gy} transform="translate({marginLeft},0)" />
 	<g bind:this={observations} />
-	<g bind:this={line} />
+	<path stroke="black" stroke-width="2" d={line(fittedLine)} />
 </svg>
 
 <style>
