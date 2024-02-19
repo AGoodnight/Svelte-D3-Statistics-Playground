@@ -3,7 +3,6 @@
 	import { random2DGraphData } from '$lib/factories/randomGraphData';
 	import { fitLine, type Point } from '$lib/regression/LinearRegression';
 	import * as d3 from 'd3';
-	export let name = 'Graph page';
 
 	const data = random2DGraphData('Weight', 'Size', 200, 100);
 
@@ -23,7 +22,8 @@
 	let observations: any = undefined;
 	let gridlinesX: any = undefined;
 	let gridlinesY: any = undefined;
-	let line: any = undefined;
+	let labelX: any = undefined;
+	let labelY: any = undefined;
 
 	const fittedLine = fitLine(
 		data.map((d) => ({
@@ -104,14 +104,24 @@
 				.tickFormat(() => '')
 		)
 		.attr('transform', `translate(0,${innerHeight + marginTop})`);
+
+	$: d3.select(labelX)
+		.text('Weight')
+		.attr('x', marginLeft)
+		.attr('y', innerHeight + marginTop + marginBottom / 1.2);
+
+	$: d3.select(labelY)
+		.text('Size')
+		.attr('transform', `translate(0,${innerHeight + marginTop})`);
 </script>
 
-<h1>{name}</h1>
 <svg {width} {height}>
 	<g bind:this={gridlinesY} />
 	<g bind:this={gridlinesX} />
 	<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
 	<g bind:this={gy} transform="translate({marginLeft},0)" />
+	<text bind:this={labelX} />
+	<text bind:this={labelY} />
 	<g bind:this={observations} />
 	<path stroke="black" stroke-width="2" d={line(fittedLine)} />
 </svg>
