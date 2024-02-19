@@ -5,7 +5,7 @@
 	import * as d3 from 'd3';
 	export let name = 'Graph page';
 
-	const data = random2DGraphData('Weight', 'Size', 1000, 1000);
+	const data = random2DGraphData('Weight', 'Size', 200, 100);
 
 	const {
 		width,
@@ -58,6 +58,7 @@
 		})
 		.y((d) => {
 			const v = ly(d[1]);
+			// console.log(d);
 			return v;
 		});
 

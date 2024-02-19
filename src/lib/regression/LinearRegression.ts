@@ -1,4 +1,5 @@
 import { subset } from "d3";
+import solve from '$lib/forks/guassianElimination'
 import { matrix, identity, transpose, divide, multiply, lusolve, inv, concat } from "mathjs";
 
 export interface Point {
@@ -6,22 +7,20 @@ export interface Point {
 	y: number
 }
 
-// const slope = Array.from({ length: 30 }, (_, i) =>
-// 	Array.from({ length: 2 }, () => Math.random() * i)
-// );
-// const yIntercept = Array.f
-
 export const fitLine = (data: Point[]) => {
 	const _vectorA: number[][] = data.map((d) => [d.x, 1]);
 	const _vectorB: number[] = data.map((d) => d.y)
+
 	const _matrixA = matrix(_vectorA);
+	const _matrixB = matrix(_vectorB);
 	const _transposeA = transpose(_matrixA);
 
 	const A = multiply(_transposeA, _matrixA)
-	const b = multiply(_transposeA, _vectorB)
+	const b = multiply(_transposeA, _matrixB)
 
+	// using the inverse gives the same result as Gaussian Elimnation
 	const C = multiply(inv(A), b)
-
+	// console.log(solve(A.valueOf(), b.valueOf()));
 	const slope = C.valueOf()[0] as number
 	const yIntercept = C.valueOf()[1] as number
 
