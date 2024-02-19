@@ -9,9 +9,8 @@ export const random2DGraphData = (
 ): Record<string, number>[] => {
     return Array.from({ length: points }, (_, i) =>
         [scale / points * i, slope * (Math.random() * error + i) + yIntercept]
-    ).sort((a, b) => (a[0] - b[0]))
-        .reduce((acc: Record<string, number>[], ar) => {
-            acc.push({ [axisX]: ar[0], [axisY]: ar[1] });
-            return acc;
-        }, [])
+    ).reduce((acc: Record<string, number>[], ar) => {
+        acc.push({ [axisX]: ar[0], [axisY]: ar[1] });
+        return acc;
+    }, [])
 }
