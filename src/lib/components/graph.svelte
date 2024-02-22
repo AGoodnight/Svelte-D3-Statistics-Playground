@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as config from '$lib/constants/graphConfig.constants';
 	import { random2DGraphData } from '$lib/factories/randomGraphData';
-	import { fitLine, type Point } from '$lib/regression/LinearRegression';
+	import { linearRegression, type Point } from '$lib/regression/LinearRegression';
 	import * as d3 from 'd3';
 
 	const data = random2DGraphData('Weight', 'Size', 200, 100);
@@ -25,14 +25,14 @@
 	let labelX: any = undefined;
 	let labelY: any = undefined;
 
-	const fittedLine = fitLine(
+	const fittedLine = linearRegression(
 		data.map((d) => ({
 			x: d['Weight'],
 			y: d['Size']
 		}))
-	).map((p: Point) => [p.x, p.y]);
+	).line.map((p: Point) => [p.x, p.y]);
 
-	console.log(JSON.stringify(data));
+	// console.log(JSON.stringify(data));
 
 	const xExtent = d3.extent(data, (d) => d['Weight']);
 	const yExtent = d3.extent(data, (d) => d['Size']);
