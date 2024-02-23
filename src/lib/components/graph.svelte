@@ -14,7 +14,9 @@
 	let dataSet: Record<string, number>[];
 
 	onMount(() => {
-		dataSet$.next(dataService.Data);
+		dataService.Data$.subscribe((_data: any) => {
+			dataSet$.next(_data);
+		});
 		onMounted.next();
 	});
 
