@@ -54,14 +54,14 @@
 		(resolve, reject) => {
 			dataSet$.pipe(takeUntil(onDestroyed)).subscribe((_dataSet) => {
 				dataSet = _dataSet;
-				resolve(
-					linearRegression(
-						_dataSet.map((d) => ({
-							x: d['Weight'],
-							y: d['Size']
-						}))
-					).line.map((p: Point) => [p.x, p.y])
-				);
+				const _line: Iterable<[number, number]> = linearRegression(
+					_dataSet.map((d) => ({
+						x: d['Weight'],
+						y: d['Size']
+					}))
+				).line.map((p: Point) => [p.x, p.y]);
+				console.log(_line);
+				resolve(_line);
 			});
 		}
 	);
@@ -71,7 +71,7 @@
 		yExtent = d3.extent(dataSet, (d) => d['Size']);
 	}
 
-	$: if (xExtent && yExtent) {
+	$: if (dataSet && xExtent && yExtent) {
 		lx = d3
 			.scaleLinear()
 			.domain(xExtent)
@@ -88,23 +88,19 @@
 			.scaleLinear()
 			.domain(yExtent)
 			.range([height - marginBottom, marginTop]);
-	}
-
-	$: if (lx && ly) {
 		line = d3
 			.line()
 			.x((d) => {
 				const v = lx(d[0]);
+				console.log(`X:${v}`);
 				return v;
 			})
 			.y((d) => {
 				const v = ly(d[1]);
-				// console.log(d);
+				console.log(`Y:${v}`);
 				return v;
 			});
-	}
 
-	$: if (dataSet && x && y) {
 		d3.select(gx).call(d3.axisBottom(x));
 		d3.select(gy).call(d3.axisLeft(y));
 		d3.select(observations)

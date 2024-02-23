@@ -75,6 +75,8 @@ export const lineOfBestFit = (sumOfSquares: Matrix, data: Point[]) => {
 	const slope = sumOfSquares.valueOf()[0] as number
 	const yIntercept = sumOfSquares.valueOf()[1] as number
 
+	console.log(sumOfSquares.valueOf())
+
 	const point1 = [0, yIntercept];
 	const point2 = [data[data.length - 1].x, slope * (data[data.length - 1].x) + yIntercept];
 

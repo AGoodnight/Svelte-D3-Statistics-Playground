@@ -6,10 +6,11 @@
 
 	const dataService: DataService = getContext('dataService');
 
-	$: pearsonCorrelation = 0;
+	let pearsonCorrelation = 0;
 
 	if (dataService.Data) {
 		dataService.Data$.subscribe((_data: any) => {
+			console.log(_data);
 			pearsonCorrelation = calculatePearsonCorrelation(
 				_data.map((d: any) => ({
 					x: d['Weight'],
