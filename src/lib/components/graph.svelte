@@ -20,6 +20,7 @@
 				.selectAll('circle')
 				.data(_data)
 				.join('circle')
+				.attr('fill', '#999')
 				.attr('cx', (d) => graph.x(d['Weight']))
 				.attr('cy', (d) => graph.y(d['Size']))
 				.attr('r', 3);
@@ -72,12 +73,12 @@
 		<text bind:this={labelX} />
 		<text bind:this={labelY} />
 		<g bind:this={observations} />
-		<path stroke="black" stroke-width="2" d={line} />
+		<path stroke="white" stroke-width="2" d={line} />
 	</svg>
 </body>
 
 <style>
 	:global(.axis-grid line) {
-		stroke: #ddd;
+		stroke: #555;
 	}
 </style>

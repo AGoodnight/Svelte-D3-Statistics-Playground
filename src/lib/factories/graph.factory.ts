@@ -71,12 +71,12 @@ export const linearRegressionGraph = (dataSet: Record<string, number>[]): GraphN
         .line()
         .x((d) => {
             const v = lx(d[0]);
-            console.log(`X:${v}`);
+            // console.log(`X:${v}`);
             return v;
         })
         .y((d) => {
             const v = ly(d[1]);
-            console.log(`Y:${v}`);
+            // console.log(`Y:${v}`);
             return v;
         });
 
