@@ -63,16 +63,18 @@
 	let line: any = undefined;
 </script>
 
-<svg {width} {height}>
-	<g bind:this={gridlinesY} />
-	<g bind:this={gridlinesX} />
-	<g bind:this={axisBottom} transform="translate(0,{height - marginBottom})" />
-	<g bind:this={axisLeft} transform="translate({marginLeft},0)" />
-	<text bind:this={labelX} />
-	<text bind:this={labelY} />
-	<g bind:this={observations} />
-	<path stroke="black" stroke-width="2" d={line} />
-</svg>
+<body>
+	<svg {width} {height}>
+		<g bind:this={gridlinesY} />
+		<g bind:this={gridlinesX} />
+		<g bind:this={axisBottom} transform="translate(0,{height - marginBottom})" />
+		<g bind:this={axisLeft} transform="translate({marginLeft},0)" />
+		<text bind:this={labelX} />
+		<text bind:this={labelY} />
+		<g bind:this={observations} />
+		<path stroke="black" stroke-width="2" d={line} />
+	</svg>
+</body>
 
 <style>
 	:global(.axis-grid line) {

@@ -14,6 +14,15 @@ const config = {
 		adapter: adapter()
 	},
 
+	server:{
+		open:true,
+		port:4173,
+	},
+
+	build:{
+		watch:true
+	},
+
 	onwarn: (warning, handler) => {
 		const { code, frame } = warning;
 		if (code === "css-unused-selector")

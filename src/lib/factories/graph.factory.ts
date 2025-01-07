@@ -85,7 +85,7 @@ export const linearRegressionGraph = (dataSet: Record<string, number>[]): GraphN
             x: d['Weight'],
             y: d['Size']
         }))
-    ).line.map((p: Point) => [p.x, p.y])
+    ).lineBstFit.map((p: Point) => [p.x, p.y])
 
     return {
         fittedLine,

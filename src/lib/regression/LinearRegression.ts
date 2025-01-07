@@ -5,6 +5,11 @@ export interface Point {
 	y: number
 }
 
+export interface LinearRegressionOutput extends Record<string,any> {
+	lineBstFit: Point[], 
+	sumOfSquares:any
+} 
+
 const addBiasTerm = (data: Point[]) => {
 	return data.map((d) => [1, d.y]);
 }
@@ -13,21 +18,29 @@ const costFunction = () => {
 	sqrt(mean())
 }
 
-const calculateVariance = (vectors: number[], mean: number) => {
+const calculateVariance = (vectors: number[], mean: number):number => {
+	// sum of squares divided by
 	return vectors.reduce((sum: number, _x: number) => {
 		sum += Math.pow(_x - mean, 2);
 		return sum
 	}, 0) / vectors.length - 1
 }
 
-const calculateCovariance = (vectors: { x: number[], y: number[] }, means: { x: number, y: number }) => {
+const calculateCovariance = (vectors: { x: number[], y: number[] }, means: { x: number, y: number }):number => {
 	return Array.from({ length: vectors.x.length - 1 }, (_, _i) => _i).reduce((sum: number, _: number, _i: number) => {
 		sum += (vectors.x[_i] - means.x) * (vectors.y[_i] - means.y)
 		return sum
 	}, 0) / vectors.x.length - 1
 }
 
-export const calculatePearsonCorrelation = (data: Point[]) => {
+export const calculatePearsonCorrelation = (data:Point[]):{
+		covariance:number,
+		// means:Point,
+		standardDeviation:number,
+		variance:number,
+		dependentVariance:number,
+		value:number
+} => {
 	// const _matrices = asMatrices(data);
 	const vectors = data.reduce((_vectors: { x: number[], y: number[] }, _datum: Point) => {
 		_vectors.x.push(_datum.x);
@@ -42,7 +55,15 @@ export const calculatePearsonCorrelation = (data: Point[]) => {
 	const dependentVariance: number = calculateVariance(vectors.y, means.y);
 	const covariance: number = calculateCovariance(vectors, means);
 
-	return (covariance) / (Math.sqrt(estimatedPopulationVariance) * Math.sqrt(dependentVariance))
+	return {
+		// cost:costFunction(),
+		covariance,
+		// means,
+		standardDeviation,
+		variance:estimatedPopulationVariance,
+		dependentVariance:dependentVariance,
+		value:(covariance) / (Math.sqrt(estimatedPopulationVariance) * Math.sqrt(dependentVariance))
+	}
 }
 
 
@@ -83,10 +104,12 @@ export const lineOfBestFit = (sumOfSquares: Matrix, data: Point[]) => {
 	return [{ x: point1[0], y: point1[1] }, { x: point2[0], y: point2[1] }]
 }
 
-export const linearRegression = (data: Point[]): { correlation: number, line: Point[] } => {
+export const linearRegression = (data: Point[]):LinearRegressionOutput  => {
+	const correlation = calculatePearsonCorrelation(data);
 	return {
-		line: lineOfBestFit(matrixSumOfSquares(data), data),
-		correlation: calculatePearsonCorrelation(data)
+		lineBstFit: lineOfBestFit(matrixSumOfSquares(data), data),
+		sumOfSquares:matrixSumOfSquares(data),
+		...correlation
 	}
 
 }

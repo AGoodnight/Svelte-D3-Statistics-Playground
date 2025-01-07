@@ -1,5 +1,5 @@
 import { random2DGraphData } from "$lib/factories/randomGraphData";
-import { ReplaySubject, Subject } from "rxjs";
+import { ReplaySubject } from "rxjs";
 
 export class DataService {
 
